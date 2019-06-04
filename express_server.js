@@ -5,7 +5,7 @@ const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({extended: true}));
 
 function generateRandomString() {
-
+    return (Math.random() * 6).toString(36).substring(6).toUpperCase();
 }
 
 app.set("view engine", "ejs")
@@ -16,8 +16,11 @@ var urlDatabase = {
 };
 
 app.post("/urls", (req, res) => {
+    var randomString = generateRandomString();
     console.log(req.body);  // Log the POST request body to the console
-    res.send("Ok");         // Respond with 'Ok' (we will replace this)
+    urlDatabase[randomString] = req.body.longURL;
+    let templateVars = { shortURL: randomString, longURL: urlDatabase };
+    res.render("urls_show", templateVars)
 });
 
 app.get("/urls/new", (req, res) => {
@@ -29,11 +32,11 @@ app.get("/urls/:shortURL", (req, res) => {
     res.render("urls_show", templateVars);
 });
 
-app.get("/", (req, res) => {
-  res.send("Hello!");
+app.get("/u/:shortURL", (req, res) => {
+    res.redirect(urlDatabase[req.params.shortURL]);
 });
 
-app.get("/urls", (req, res) => {
+app.get("/", (req, res) => {
     let templateVars = { urls: urlDatabase };
     res.render("urls_index", templateVars);
   });
@@ -46,6 +49,6 @@ app.get("/urls.json", (req, res) => {
     res.json(urlDatabase);
 });
 
-app.get("/hello", (req, res) => {
+app.get("/", (req, res) => {
     res.send("<html><body>Hello <b>World</b></body></html>\n");
 });
