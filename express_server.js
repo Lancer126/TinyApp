@@ -5,7 +5,7 @@ const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({extended: true}));
 
 function generateRandomString() {
-    return (Math.random() * 6).toString(36).substring(6).toUpperCase();
+    return (Math.random() * 6).toString(36).substring(6);
 }
 
 app.set("view engine", "ejs")
@@ -17,7 +17,6 @@ var urlDatabase = {
 
 app.post("/urls", (req, res) => {
     var randomString = generateRandomString();
-    console.log(req.body);  // Log the POST request body to the console
     urlDatabase[randomString] = req.body.longURL;
     let templateVars = { shortURL: randomString, longURL: urlDatabase };
     res.render("urls_show", templateVars)
