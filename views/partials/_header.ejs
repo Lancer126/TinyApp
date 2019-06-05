@@ -1,1 +1,13 @@
 <h1>TinyApp</h1>
+
+<% if (!username) { %>
+<form class="form-inline" action="/login" method="POST">
+    <input class="form-control" type="text" name="username" placeholder="Username" style="width: 300px; margin: 1em">
+    <button type="submit" class="btn btn-primary">Login</button>
+</form>
+<% } else { %>
+Username: <%= username %>
+<form action="/logout" method="POST" class="inline">
+    <button class="float-left submit-button" >Logout</button><br><br>
+</form>
+<% } %>
