@@ -19,7 +19,7 @@ app.post("/urls", (req, res) => {
     var randomString = generateRandomString();
     urlDatabase[randomString] = req.body.longURL;
     let templateVars = { shortURL: randomString, longURL: urlDatabase };
-    res.render("urls_show", templateVars)
+    res.redirect("/urls/"+randomString);
 });
 
 app.get("/urls/new", (req, res) => {
@@ -35,7 +35,7 @@ app.get("/u/:shortURL", (req, res) => {
     res.redirect(urlDatabase[req.params.shortURL]);
 });
 
-app.get("/", (req, res) => {
+app.get("/urls", (req, res) => {
     let templateVars = { urls: urlDatabase };
     res.render("urls_index", templateVars);
   });
@@ -49,5 +49,5 @@ app.get("/urls.json", (req, res) => {
 });
 
 app.get("/", (req, res) => {
-    res.send("<html><body>Hello <b>World</b></body></html>\n");
+    res.redirect("/urls");
 });

@@ -10,6 +10,9 @@
 </head>
 <body style="font-size:20px; padding:50px;">
     <header><% include ./partials/_header %></header>
+    <a href="<%= '/urls/new' %>">Create new TinyURL</a>
+    <br>
+    My URLs:
     <ul>
         <% var links = Object.keys(urls) %>
         <% links.forEach(function(url) { %>
