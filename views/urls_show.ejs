@@ -10,11 +10,16 @@
 </head>
 <body style="font-size:20px; padding:50px;">
     <header><% include ./partials/_header %></header>
-    <ul>
-        <a href="<%= longURL[shortURL] %>">Click on the URL</a>
-    </ul>
-    <form>
-        <input type="button" value="Return to the URLs" onClick="javascript:history.go(-2)" />
+    
+    <h1>ShortURL: <%= shortURL %></h1>
+    
+    <form class="form-inline" action="/urls/<%= shortURL %>" method="POST">
+          <label for="longURL">Enter a new URL: </label>
+          <input class="form-control" type="text" name="longURL" placeholder="<%= longURL[shortURL] %>" style="width: 300px; margin: 1em">
+          <button type="submit" class="btn btn-primary">Update</button>
+    </form>
+    <form action="/urls" class="inline">
+        <button class="float-left submit-button" >Go back to the URLs</button>
     </form>
 </body>
 </html>
