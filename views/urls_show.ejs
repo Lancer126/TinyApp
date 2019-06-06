@@ -10,7 +10,6 @@
 </head>
 <body style="font-size:20px; padding:50px;">
     <header><% include ./partials/_header %></header>
-    
     <h1>ShortURL: <%= shortURL %></h1>
     
     <form class="form-inline" action="/urls/<%= shortURL %>" method="POST">

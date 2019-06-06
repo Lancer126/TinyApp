@@ -5,27 +5,19 @@ const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser());
-const users = {
-    randomId: {
-        "id": 1,
-        "email": 1,
-        "password": 0
-    }
-};
+const users = {};
 
 function generateRandomString() {
     return (Math.random() * 6).toString(36).substring(6);
 }
 
-//Faire fonctionner
-function emailChecker(email, id) {
-    var emails = Object.keys(users[id]);
-    console.log(emails);
-    emails.forEach(function (anEmail) {
-        if(anEmail === email) {
-            return true;
+function emailChecker(email) {
+    for(user in users) {
+        let currentUser = users[user];
+        if(currentUser.email === email){
+            return user;
         }
-    });
+    }
     return false;
 }
 
@@ -77,13 +69,13 @@ app.get("/register", (req, res) => {
 });
 
 app.post("/register", (req, res) => {
-    var randomId = generateRandomString();
-    var repeatedEmail = false;
+    var repeatedEmail = emailChecker(req.body.email);
 
     if(!(req.body.email && req.body.password) || repeatedEmail) {
         res.status(400);
         res.redirect("/urls/");
     } else {
+        var randomId = generateRandomString();
         users[randomId] = {};
         users[randomId].id = randomId;
         users[randomId].email = req.body.email;
@@ -101,6 +93,10 @@ app.get("/urls.json", (req, res) => {
     res.json(urlDatabase);
 });
 
+app.get("/users.json", (req, res) => {
+    res.json(users);
+});
+
 app.get("/", (req, res) => {
     res.redirect("/urls");
 });
@@ -110,15 +106,17 @@ app.get("/login", (req, res) => {
     res.render("urls_login", templateVars);
 });
 
-//A changer
 app.post("/login", (req, res) => {
-    var randomId = generateRandomString();
-    users[randomId] = {};
-        users[randomId].id = randomId;
-        users[randomId].email = req.body.email;
-        users[randomId].password = req.body.password;
-        res.cookie("user_id", randomId);
-        res.redirect("/urls/");
+    var checkEmail = emailChecker(req.body.email);
+    if(!checkEmail) {
+        res.status(403).send("Wrong credentials");
+    } else if (req.body.password === users[checkEmail].password) {
+        res.cookie("user_id", checkEmail);
+    }
+    else {
+        res.status(403).send("Wrong credentials");
+    }
+    res.redirect("/urls/");
 });
 
 app.post("/logout", (req, res) => {
