@@ -6,6 +6,7 @@ const cookieParser = require("cookie-parser");
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser());
 app.set("view engine", "ejs")
+const bcrypt = require('bcrypt');
 var urlDatabase = {};
 const users = {};
 
@@ -32,6 +33,10 @@ function emailChecker(email) {
         }
     }
     return false;
+}
+
+function encryptPassword(pwd) {
+    return bcrypt.hashSync(pwd, 10);
 }
 
 app.get("/urls/new", (req, res) => {
@@ -107,7 +112,7 @@ app.post("/register", (req, res) => {
         users[randomId] = {};
         users[randomId].id = randomId;
         users[randomId].email = req.body.email;
-        users[randomId].password = req.body.password;
+        users[randomId].password = encryptPassword(req.body.password);
         res.cookie("user_id", randomId);
         res.redirect("/urls/");
     }
@@ -138,7 +143,7 @@ app.post("/login", (req, res) => {
     var checkEmail = emailChecker(req.body.email);
     if(!checkEmail) {
         res.status(403).send("Wrong credentials");
-    } else if (req.body.password === users[checkEmail].password) {
+    } else if (bcrypt.compareSync(req.body.password, users[checkEmail].password)) {
         res.cookie("user_id", checkEmail);
     }
     else {
