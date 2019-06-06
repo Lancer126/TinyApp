@@ -10,11 +10,11 @@
 </head>
 <body style="font-size:20px; padding:50px;">
     <header><% include ./partials/_header %></header>
-    My URLs:
+    <% if (user) { %>
+        My URLs:
     <ul>
-        <% var links = Object.keys(urls) %>
-        <% links.forEach(function(url) { %>
-            <%= url %> - <%= urls[url] %>
+        <% urls.forEach(function(url) { %>
+            <%= url %> - <%= objURLs[url].longURL %>
             <form method="GET" action="/urls/<%= url %>">
                 <button type="submit" class="btn btn-primary">Edit</button>
             </form>
@@ -23,5 +23,9 @@
             </form>
         <% }); %>
     </ul>
+    <% } else { %>
+    <br>
+    <h4>Login or Register</h4>
+    <% } %>
 </body>
 </html>
