@@ -5,6 +5,7 @@ const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser());
+const users = {}
 
 function generateRandomString() {
     return (Math.random() * 6).toString(36).substring(6);
@@ -51,6 +52,21 @@ app.get("/urls", (req, res) => {
     let templateVars = { username: req.cookies["username"], urls: urlDatabase };
     res.render("urls_index", templateVars);
   });
+
+app.get("/register", (req, res) => {
+    let templateVars = { username: req.cookies["username"], urls: urlDatabase };
+    res.render("urls_register", templateVars);
+});
+
+app.post("/register", (req, res) => {
+    var randomId = generateRandomString();
+    users[randomId] = {};
+    users[randomId].id = randomId;
+    users[randomId].email = req.body.email;
+    users[randomId].password = req.body.password;
+    res.cookie("id", randomId);
+    res.redirect("/urls/");
+});
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
