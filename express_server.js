@@ -2,9 +2,9 @@ var express = require("express");
 var app = express();
 var PORT = 8080; // default port 8080
 const bodyParser = require("body-parser");
-const cookieSession = require("cookie-session");
-app.use(bodyParser.urlencoded({extended: true}));
-app.use(cookieSession({
+const cookieSession = require("cookie-session");    //Allows for cookies
+app.use(bodyParser.urlencoded({extended: true}));   //
+app.use(cookieSession({ //Allows for cookies
     name: 'session',
     keys: ['key1', 'key2'],
   
