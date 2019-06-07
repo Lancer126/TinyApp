@@ -11,15 +11,15 @@
 <body style="font-size:20px; padding:50px;">
     <header><% include ./partials/_header %></header>
     <% if (user) { %>
-        My URLs:
+    My URLs: <%= urls.length %>
     <ul>
         <% urls.forEach(function(url) { %>
-            <%= url %> - <%= objURLs[url].longURL %>
+            <br><%= url %> - <%= objURLs[url].longURL %>
             <form method="GET" action="/urls/<%= url %>">
                 <button type="submit" class="btn btn-primary">Edit</button>
             </form>
             <form method="POST" action="/urls/<%= url %>/delete">
-                <button type="submit" class="btn btn-primary">Delete</button>
+                <button class="float-left submit-button" >Delete</button><br>
             </form>
         <% }); %>
     </ul>

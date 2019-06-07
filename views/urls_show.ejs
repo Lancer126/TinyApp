@@ -13,8 +13,9 @@
     <h1>ShortURL: <%= shortURL %></h1>
     
     <form class="form-inline" action="/urls/<%= shortURL %>" method="POST">
-          <label for="urls">Enter a new URL: </label>
-          <input class="form-control" type="text" name="urls" placeholder="<%= urls[shortURL].longURL %>" style="width: 300px; margin: 1em">
-          <button type="submit" class="btn btn-primary">Update</button>
+        <label for="urls">Enter a new URL: </label>
+        <input class="form-control" type="text" name="urls" placeholder="<%= urls[shortURL].longURL %>" style="width: 300px; margin: 1em">
+        <button type="submit" class="btn btn-primary">Update</button>
+    </form>
 </body>
 </html>
